@@ -9,11 +9,11 @@ import { fetchCartData, sendCartData } from "./redux/cart-actions";
 let isInitial = true;
 
 function App() {
+  const dispatch = useDispatch();
   const cartVisble = useSelector((state) => state.cartUI.cartVisible);
+  const cart = useSelector((state) => state.cart);
   const notification = useSelector((state) => state.cartUI.notification);
   
-  const cart = useSelector((state) => state.cart.items);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchCartData())
@@ -25,7 +25,10 @@ function App() {
       return;
     }
 
-    dispatch(sendCartData(cart));
+    if(cart.changed){
+      dispatch(sendCartData(cart));
+    }
+
   }, [cart, dispatch]);
 
   return (
